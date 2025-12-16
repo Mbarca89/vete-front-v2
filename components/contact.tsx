@@ -29,55 +29,54 @@ export function Contact() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Contáctanos</h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Estamos aquí para ayudarte. Comunícate con nosotros para cualquier consulta
+            Estamos para ayudarte. Comunícate con nosotros para cualquier consulta
           </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          <div>
-            <Card className="border-border bg-background mb-6">
-              <CardHeader>
-                <CardTitle className="text-foreground">Información de Contacto</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-foreground">Dirección</p>
-                    <p className="text-foreground/70">Av. del Libertador 1234, Buenos Aires</p>
-                  </div>
+        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto items-stretch">
+
+          <Card className="border-border bg-background mb-6 h-full">
+            <CardHeader>
+              <CardTitle className="text-foreground">Información de Contacto</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground">Dirección</p>
+                  <p className="text-foreground/70">Riobamba 2123 - San Luis</p>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-foreground">Teléfono</p>
-                    <p className="text-foreground/70">+54 11 1234-5678</p>
-                  </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground">Teléfono</p>
+                  <p className="text-foreground/70">+54 9 266 4392132</p>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-foreground">Email</p>
-                    <p className="text-foreground/70">info@veterinariadelparque.com.ar</p>
-                  </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground">Email</p>
+                  <p className="text-foreground/70">info@veterinariadelparque.com.ar</p>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-foreground">Horarios</p>
-                    <p className="text-foreground/70">Lun - Vie: 9:00 - 20:00</p>
-                    <p className="text-foreground/70">Sáb: 9:00 - 14:00</p>
-                    <p className="text-foreground/70">Emergencias 24/7</p>
-                  </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Clock className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground">Horarios</p>
+                  <p className="text-foreground/70">Lun - Vie: 9:00 - 20:00</p>
+                  <p className="text-foreground/70">Sáb: 9:00 - 14:00</p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-          <Card className="border-border bg-background">
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-background h-full">
             <CardHeader>
               <CardTitle className="text-foreground">Envíanos un Mensaje</CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+            <CardContent className="flex flex-col h-full">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4 flex-1">
                 <div>
                   <Input
                     placeholder="Tu Nombre"
@@ -113,7 +112,7 @@ export function Contact() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground mt-auto">
                   Enviar Mensaje
                 </Button>
               </form>

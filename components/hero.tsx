@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { Phone, Calendar, MapPin } from "lucide-react"
+import { Phone, MessageCircle, MapPin, ShoppingBagIcon } from "lucide-react"
+import Link from "next/link"
 
 export function Hero() {
   return (
@@ -11,31 +12,35 @@ export function Hero() {
               Cuidado Profesional para tu Mejor Amigo
             </h1>
             <p className="text-lg md:text-xl text-foreground/80 mb-8 leading-relaxed">
-              En Veterinaria del Parque, brindamos atención veterinaria de excelencia con más de 15 años de experiencia.
+              En Veterinaria del Parque, brindamos atención veterinaria de excelencia con más de 14 años de experiencia.
               Tu mascota merece el mejor cuidado.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Calendar className="w-5 h-5 mr-2" />
-                Reservar Turno
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground bg-transparent"
-              >
-                <Phone className="w-5 h-5 mr-2" />
-                Contactar
-              </Button>
+              <Link href="/tienda">
+                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <ShoppingBagIcon className="w-5 h-5 mr-2" />
+                  Tienda
+                </Button>
+              </Link>
+              <a href="https://wa.me/5492664392132" target="window">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground bg-transparent"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Contactar
+                </Button>
+              </a>
             </div>
             <div className="flex flex-col gap-3 text-foreground/70">
               <div className="flex items-center gap-2">
                 <Phone className="w-5 h-5 text-primary" />
-                <span>+54 11 1234-5678</span>
+                <span>+54 9 266 4392132</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
-                <span>Av. del Libertador 1234, Buenos Aires</span>
+                <span>Riobamba 2123 - San Luis</span>
               </div>
             </div>
           </div>
@@ -48,7 +53,7 @@ export function Hero() {
               />
             </div>
             <div className="absolute -bottom-6 -left-6 bg-accent text-accent-foreground p-6 rounded-xl shadow-lg">
-              <div className="text-3xl font-bold">15+</div>
+              <div className="text-3xl font-bold">14+</div>
               <div className="text-sm">Años de Experiencia</div>
             </div>
           </div>

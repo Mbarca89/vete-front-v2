@@ -1,18 +1,18 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Stethoscope, Syringe, Scissors, Heart, Clock, Pill } from "lucide-react"
+import { TestTube, Syringe, Scissors, Bone, SquareActivity, MemoryStick } from "lucide-react"
 import Link from "next/link"
 
 const services = [
   {
-    icon: Stethoscope,
-    title: "Consultas Generales",
-    description: "Exámenes completos y diagnósticos precisos para mantener la salud de tu mascota.",
+    icon: TestTube,
+    title: "Análisis Clínicos",
+    description: "Análisis clínicos completos para detectar cualquier problema a tiempo",
   },
   {
-    icon: Syringe,
-    title: "Vacunación",
-    description: "Planes de vacunación completos para proteger a tu mascota de enfermedades.",
+    icon: Bone,
+    title: "Diagnóstico por imágenes",
+    description: "Ecografías y radiografías digitales para un diagnóstico preciso.",
   },
   {
     icon: Scissors,
@@ -20,19 +20,19 @@ const services = [
     description: "Procedimientos quirúrgicos con equipamiento moderno y anestesia segura.",
   },
   {
-    icon: Heart,
-    title: "Cardiología",
-    description: "Diagnóstico y tratamiento de enfermedades cardíacas en mascotas.",
+    icon: SquareActivity,
+    title: "Internación",
+    description: "Cuidado intensivo y monitoreo constante para mascotas hospitalizadas.",
   },
   {
-    icon: Clock,
-    title: "Emergencias 24/7",
-    description: "Atención de urgencias disponible las 24 horas del día, todos los días.",
+    icon: Syringe,
+    title: "Vacunación",
+    description: "Planes de vacunación completos para proteger a tu mascota de enfermedades.",
   },
   {
-    icon: Pill,
-    title: "Farmacia",
-    description: "Medicamentos y productos veterinarios de calidad para tu mascota.",
+    icon: MemoryStick,
+    title: "Chipeado",
+    description: "Servicio de chipeado para la identificación segura de tu mascota.",
   },
 ]
 
@@ -43,7 +43,7 @@ export function Services() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Nuestros Servicios</h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Ofrecemos una amplia gama de servicios veterinarios para cuidar la salud integral de tu mascota
+            Tu mascota es parte de nuestra familia. Nos dedicamos a brindar el mejor cuidado y atención para que tu peludo amigo se mantenga feliz y saludable.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
