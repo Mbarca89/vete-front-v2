@@ -3,6 +3,10 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import ClientLayout from "./client-layout"
+import { CartProvider } from "@/components/cart/CartProvider"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -21,7 +25,13 @@ export default function RootLayout({
   return (
     <html lang="es" className={inter.variable}>
       <body className="font-sans">
-        <ClientLayout>{children}</ClientLayout>
+        <CartProvider>
+          <Header />
+          <main className="pt-20 min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   )

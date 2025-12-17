@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { X, Search } from "lucide-react"
-
+import { useCart } from "@/components/cart/CartProvider"
 import { getProducts, getProductsByCategory, searchProducts } from "@/lib/api"
 import type { Categories, ProductDto, ProductsPage } from "@/types/shop"
 
@@ -20,6 +20,7 @@ export default function TiendaClient({ categories, initialProducts }: TiendaClie
 
     const [loading, setLoading] = useState(false)
 
+    const { addItem } = useCart()
 
     // --- estado principal
     const [products, setProducts] = useState<ProductDto[]>(initialProducts?.data ?? [])
@@ -265,8 +266,19 @@ export default function TiendaClient({ categories, initialProducts }: TiendaClie
 
                                         <div className="mt-4 flex items-center justify-between">
                                             <span className="text-xl font-bold text-primary">${p.price}</span>
-                                            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                                                Comprar
+                                            <Button
+                                                onClick={() =>
+                                                    addItem({
+                                                        id: p.id,
+                                                        name: p.name,
+                                                        price: p.price,
+                                                        thumbnail: p.thumbnail ?? null,
+                                                        categoryName: p.categoryName ?? null,
+                                                    })
+                                                }
+                                                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                                            >
+                                                Agregar
                                             </Button>
                                         </div>
                                     </CardContent>

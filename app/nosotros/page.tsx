@@ -29,7 +29,6 @@ const team = [
 export default function Nosotros() {
   return (
     <div className="min-h-screen">
-      <Header />
       <main>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-16 md:py-24">
@@ -128,7 +127,6 @@ export default function Nosotros() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }

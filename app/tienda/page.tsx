@@ -9,12 +9,10 @@ export default async function ProductosPage() {
 
   return (
     <>
-      <Header />
       <TiendaClient
         categories={categories}
         initialProducts={initialProducts}
       />
-      <Footer />
     </>
   )
 }

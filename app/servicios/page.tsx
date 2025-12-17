@@ -73,7 +73,6 @@ const detailedServices = [
 export default function Servicios() {
   return (
     <div className="min-h-screen">
-      <Header />
       <main>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-16 md:py-24">
@@ -132,7 +131,6 @@ export default function Servicios() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }
