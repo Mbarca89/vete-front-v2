@@ -76,7 +76,7 @@ export default function CarritoPage() {
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen pt-32">
             <main className="container mx-auto px-4 py-10">
                 <div className="grid md:grid-cols-3 gap-8">
                     {/* Items */}

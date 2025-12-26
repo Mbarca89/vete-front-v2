@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className="font-sans">
         <CartProvider>
           <Header />
-          <main className="pt-20 min-h-screen">
+          <main className="">
             {children}
           </main>
           <Footer />

@@ -48,18 +48,13 @@ export default function Nosotros() {
             <div className="max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl font-bold text-primary mb-6">Quiénes Somos</h2>
               <p className="text-lg text-foreground/70 mb-4">
-                Veterinaria del Parque es una clínica veterinaria moderna y completa, dedicada a brindar atención médica
-                de excelencia a tus mascotas. Con más de 25 años de trayectoria en el cuidado animal, nos hemos
-                convertido en un referente en nuestra comunidad.
+                Desde el 2011 nos encargamos de mejorar la salud de los animales enfocados en brindar una atención compasiva, respeto y profesionalidad en cada consulta y tratamiento que realizamos. 
               </p>
               <p className="text-lg text-foreground/70 mb-4">
-                Nuestro equipo está conformado por profesionales altamente capacitados, equipados con tecnología de
-                punta y una profunda pasión por el bienestar animal. Creemos que cada mascota merece el mejor cuidado
-                veterinario posible.
+                En cada visita nos esforzamos por brindar la mejor atención y asesoramiento para que vuelvas a tu casa con la tranquilidad que tu mascota esta sana y bajo el cuidado de profesionales que se dedican a asegurar su bienestar.
               </p>
               <p className="text-lg text-foreground/70">
-                Nos comprometemos a proporcionar servicios veterinarios integrales, desde consultas preventivas hasta
-                procedimientos quirúrgicos complejos, siempre priorizando la salud y el confort de tu mascota.
+                Ante cualquier duda sobre algun malestar que pueda tener tu mascota, realizamos los estudios mas completos para descarcar cualquier patología presente o futura.
               </p>
             </div>
 

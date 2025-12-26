@@ -98,7 +98,7 @@ export default function Servicios() {
                     className="border-border hover:shadow-xl transition-all duration-300 bg-card overflow-hidden group"
                   >
                     {/* Image at top with overlay */}
-                    <div className="relative h-56 overflow-hidden">
+                    <div className="relative h-96 overflow-hidden">
                       <Image
                         src={service.image || "/placeholder.svg"}
                         alt={service.title}
