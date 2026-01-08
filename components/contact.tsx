@@ -1,13 +1,27 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
+import emailjs from "@emailjs/browser"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
+
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? ""
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? ""
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? ""
+
+function requireEmailJsEnv() {
+  if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+    throw new Error(
+      "Falta configurar EmailJS. Revisá NEXT_PUBLIC_EMAILJS_SERVICE_ID / TEMPLATE_ID / PUBLIC_KEY en .env.local"
+    )
+  }
+}
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -17,10 +31,45 @@ export function Contact() {
     message: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
-    console.log("[v0] Form submitted:", formData)
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.message.trim()) {
+      toast.warning("Completá todos los campos para enviar el mensaje.")
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      requireEmailJsEnv()
+      const templateParams = {
+        from_name: formData.name.trim(),
+        from_email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        message: formData.message.trim(),
+      }
+
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, {
+        publicKey: EMAILJS_PUBLIC_KEY,
+      })
+
+      toast.success("Mensaje enviado ✅", {
+        description: "Te vamos a responder a la brevedad.",
+      })
+
+      setFormData({ name: "", email: "", phone: "", message: "" })
+    } catch (err: any) {
+      const msg = String(err?.text || err?.message || err || "Error desconocido")
+      toast.error("No se pudo enviar el mensaje", {
+        description: msg.slice(0, 300),
+      })
+      console.error("EmailJS error:", err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

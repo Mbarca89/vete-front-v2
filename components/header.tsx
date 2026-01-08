@@ -40,12 +40,13 @@ export function Header() {
       router.push(path)
       return
     }
-
+    console.log(isHome, id)
     if (isHome && id) {
       const element = document.getElementById(id)
       element?.scrollIntoView({ behavior: "smooth" })
     } else if (id) {
-      router.push(`/#${id}`)
+      if (id === "contacto") router.push(`/#${id}`)
+      else router.push(`/${id}`)
     }
   }
 

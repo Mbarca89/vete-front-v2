@@ -3,21 +3,39 @@ import { Star } from "lucide-react"
 
 const testimonials = [
   {
-    name: "Laura Fernández",
-    pet: "Max (Golden Retriever)",
-    text: "Excelente atención y profesionalismo. La Dra. González salvó la vida de Max cuando tuvo una emergencia. Eternamente agradecida.",
+    name: "Maximiliano Rios",
+    pet: "Ragnar (Dogo Argentino)",
+    text: "Me encanta llevar mis perros a esa vete por qué tienen un cariño y una dedicación única",
     rating: 5,
   },
   {
-    name: "Roberto Silva",
-    pet: "Luna (Gato Persa)",
-    text: "El mejor lugar para llevar a tu mascota. Siempre atentos, cariñosos y muy profesionales. Luna está feliz y saludable gracias a ellos.",
+    name: "Mayra Mayer",
+    pet: "Cloe (Bulldog Francés)",
+    text: "Excelente el sistema de recordatorios de vacunas (que en lo personal en otra veterinaria no me a pasado) , súper honestos sinceros y claros con los diagnósticos ! Me generaron mucha confianza . Los elijo y recomiendo siempre 🙌🏼",
     rating: 5,
   },
   {
-    name: "Patricia Gómez",
-    pet: "Toby (Beagle)",
-    text: "Llevamos a Toby desde cachorro. El equipo es maravilloso, siempre disponibles y con precios justos. Los recomiendo 100%.",
+    name: "Lucia Arce",
+    pet: "Cuqui (Gato)",
+    text: "Muy buena atención, limpias instalaciones y super atento el doctor. Variedad de alimentos, medicación y accesorios.",
+    rating: 4,
+  },
+  {
+    name: "Andrea Noemi Avila",
+    pet: "",
+    text: "Excelente atención a las mascotas, el personal es muy profesional, muy recomendable.",
+    rating: 5,
+  },
+  {
+    name: "Elsa Quiroga",
+    pet: "Azul (Gato)",
+    text: "Muy buena atención Muy responsables Mis tres bebés son pacientes de Andrés.",
+    rating: 4,
+  },
+  {
+    name: "Hernan Villegas",
+    pet: "",
+    text: "Excelente atencion. 100% recomendable . Cuentan con veterinario y tambien alimentos y acsesorios para perros.",
     rating: 5,
   },
 ]

@@ -4,22 +4,34 @@ import Link from "next/link"
 
 const team = [
   {
-    name: "Dra. María González",
-    role: "Veterinaria Principal",
-    specialty: "Medicina Interna",
-    image: "/female-veterinarian-professional-portrait.jpg",
+    name: "Noelia Témoli",
+    role: "Secretaria",
+    specialty: "",
+    image: "/noe.webp",
   },
   {
-    name: "Dr. Carlos Rodríguez",
-    role: "Cirujano Veterinario",
-    specialty: "Cirugía y Traumatología",
-    image: "/male-veterinarian-professional-portrait.jpg",
+    name: "Andrés Témoli",
+    role: "Médico Veterinario",
+    specialty: "MP: 396",
+    image: "/andres.webp",
   },
   {
-    name: "Dra. Ana Martínez",
-    role: "Especialista en Cardiología",
-    specialty: "Cardiología Veterinaria",
-    image: "/female-veterinarian-with-stethoscope-portrait.jpg",
+    name: "Agustina Lerario",
+    role: "Estudiante avanzado de Veterinaria",
+    specialty: "",
+    image: "/agus.webp",
+  },
+  {
+    name: "Franco Rodríguez",
+    role: "Médico Veterinario",
+    specialty: "MP 689",
+    image: "/franco.webp",
+  },
+  {
+    name: "Valentina Suárez",
+    role: "Secretaria",
+    specialty: "",
+    image: "/valen.webp",
   },
 ]
 

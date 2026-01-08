@@ -1,12 +1,12 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Stethoscope, Syringe, Scissors, Heart, Clock, Pill, Microscope, Eye } from "lucide-react"
+import { Stethoscope, Syringe, Scissors, Eye, TestTube, Bone, SquareActivity, MemoryStick } from "lucide-react"
 import Image from "next/image"
 
 const detailedServices = [
   {
-    icon: Stethoscope,
+    icon: TestTube,
     title: "Análisis clínicos",
     description: "Diagnósticos precisos para tu mascota",
     image: "/images/services/analisis.webp",
@@ -14,7 +14,7 @@ const detailedServices = [
       "Sabemos que la salud de tu mascota es lo más importante. Por eso, ofrecemos análisis clínicos completos para detectar cualquier problema a tiempo. Desde análisis de sangre hasta pruebas específicas, estamos aquí para asegurarnos de que tu amigo de cuatro patas reciba el mejor cuidado posible.",
   },
   {
-    icon: Syringe,
+    icon: Scissors,
     title: "Cirugias",
     description: "Expertos en cuidado quirúrgico",
     image: "/images/services/cirugias.webp",
@@ -22,7 +22,7 @@ const detailedServices = [
       "Entendemos lo preocupante que puede ser una cirugía. Nuestro equipo de veterinarios experimentados se encarga de cada procedimiento con el máximo cuidado y profesionalismo. Tu mascota estará en las mejores manos, y te mantendremos informado en cada paso del camino.",
   },
   {
-    icon: Scissors,
+    icon: Stethoscope,
     title: "Clínica médica",
     description: "Atención integral para tu mascota",
     image: "/images/services/clinica.webp",
@@ -30,7 +30,7 @@ const detailedServices = [
       "Nuestro servicio de clínica médica está diseñado para atender cualquier problema de salud que pueda tener tu mascota. Desde chequeos de rutina hasta el tratamiento de enfermedades crónicas, nuestros veterinarios están aquí para brindarle a tu mascota la mejor atención médica posible. ¡Tu mascota merece lo mejor y nosotros estamos aquí para dárselo!",
   },
   {
-    icon: Heart,
+    icon: MemoryStick,
     title: "Chipeado de Mascotas",
     description: "Seguridad y tranquilidad",
     image: "/images/services/chipeado.webp",
@@ -38,7 +38,7 @@ const detailedServices = [
       "Con un microchip del tamaño de un grano de arroz implantado de forma subcutánea, le asignamos a tu mascota un identificador único que permite acreditar tu legitima propiedad en caso de extravío y es un requerimiento legal y obligatorio para viajar por vía aérea a algunos países.",
   },
   {
-    icon: Clock,
+    icon: Eye,
     title: "Ecografías",
     description: "Mirando dentro para una mejor atención",
     image: "/images/services/ecografia.webp",
@@ -46,7 +46,7 @@ const detailedServices = [
       "Las ecografías nos permiten ver lo que sucede dentro del cuerpo de tu mascota sin necesidad de procedimientos invasivos. Ya sea para un chequeo de rutina o para diagnosticar un problema específico, nuestras ecografías son rápidas, indoloras y muy efectivas.",
   },
   {
-    icon: Pill,
+    icon: SquareActivity,
     title: "Internación",
     description: "Cuidado continuo para tu mascota",
     image: "/images/services/internacion.webp",
@@ -54,14 +54,14 @@ const detailedServices = [
       "Si tu mascota necesita quedarse con nosotros por un tiempo, ofrecemos un servicio de internación cómodo y seguro. Nuestro equipo se encargará de que tu amigo reciba todo el cuidado y cariño que necesita, ¡como si estuviera en casa!",
   },
   {
-    icon: Microscope,
+    icon: Bone,
     title: "Radiología digital",
     description: "Diagnósticos rápidos y precisos",
     image: "/images/services/radiografia.webp",
     details: "Servicio de laboratorio in-situ con análisis de sangre, bioquímica y cultivos para resultados rápidos.",
   },
   {
-    icon: Eye,
+    icon: Syringe,
     title: "Vacunación",
     description: "Protección esencial para tu mascota",
     image: "/images/services/vacunacion.webp",

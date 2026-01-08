@@ -4,25 +4,39 @@ import { Card, CardContent } from "@/components/ui/card"
 
 const team = [
   {
-    name: "Dra. María González",
-    role: "Veterinaria Principal",
-    specialty: "Medicina Interna",
-    image: "/female-veterinarian-professional-portrait.jpg",
-    bio: "Con más de 15 años de experiencia en medicina veterinaria, la Dra. González se especializa en diagnóstico integral y tratamiento de enfermedades internas.",
+    name: "Noelia Témoli",
+    role: "Secretaria",
+    specialty: "",
+    image: "/noe.webp",
+    bio: "Encargada de la atención al cliente y gestión administrativa de la clínica."
   },
   {
-    name: "Dr. Carlos Rodríguez",
-    role: "Cirujano Veterinario",
-    specialty: "Cirugía y Traumatología",
-    image: "/male-veterinarian-professional-portrait.jpg",
-    bio: "Especialista en procedimientos quirúrgicos avanzados y traumatología. Cuenta con 12 años de experiencia en cirugías complejas.",
+    name: "Andrés Témoli",
+    role: "Veterinario principal",
+    specialty: "MP: 396",
+    image: "/andres.webp",
+    bio: "Más de 15 años de experiencia en veterinaria, especializado en diagnóstico clínico y cirugía general."
   },
   {
-    name: "Dra. Ana Martínez",
-    role: "Especialista en Cardiología",
-    specialty: "Cardiología Veterinaria",
-    image: "/female-veterinarian-with-stethoscope-portrait.jpg",
-    bio: "Experta en diagnóstico y tratamiento de enfermedades cardíacas. Ha realizado especializaciones en cardiología veterinaria con 10 años de práctica.",
+    name: "Agustina Lerario",
+    role: "Asistente de cirugía",
+    specialty: "Post operatorios",
+    image: "/agus.webp",
+    bio: "Estudiante avanzado de Veterinaria, actualmente asistente de cirugía y encargada de post operatorios."
+  },
+  {
+    name: "Franco Rodríguez",
+    role: "Clínica General",
+    specialty: "MP 689",
+    image: "/franco.webp",
+    bio: "Médico veterinario con más de 4 años de experiencia, especializado en anestesia."
+  },
+  {
+    name: "Valentina Suárez",
+    role: "Secretaria",
+    specialty: "",
+    image: "/valen.webp",
+    bio: "Encargada de la atención al cliente y gestión administrativa de la clínica."
   },
 ]
 

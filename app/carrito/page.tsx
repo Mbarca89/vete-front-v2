@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
 import { useCart } from "@/components/cart/CartProvider"
 import type { CustomerData } from "@/types/cart"
@@ -12,6 +12,41 @@ import { toast } from "sonner"
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
+type Field = "name" | "email" | "phone"
+type Errors = Partial<Record<Field, string>>
+type Touched = Partial<Record<Field, boolean>>
+
+function isValidEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+}
+
+function onlyDigits(s: string) {
+    return s.replace(/\D/g, "")
+}
+
+function validate(customer: CustomerData): Errors {
+    const errors: Errors = {}
+
+    const name = customer.name.trim()
+    const email = customer.email.trim()
+    const phoneDigits = onlyDigits(customer.phone)
+
+    if (!name) errors.name = "El nombre es obligatorio."
+    if (!email) errors.email = "El email es obligatorio."
+    else if (!isValidEmail(email)) errors.email = "El email no tiene un formato válido."
+
+    if (!phoneDigits) errors.phone = "El teléfono es obligatorio."
+    else if (phoneDigits.length !== 10) {
+        errors.phone = "Debe tener exactamente 10 números (sin espacios ni guiones)."
+    }
+
+    return errors
+}
+
+function hasErrors(errors: Errors) {
+    return Object.keys(errors).length > 0
+}
+
 export default function CarritoPage() {
     const { items, subtotal, setQuantity, removeItem, clear } = useCart()
     const [loading, setLoading] = useState(false)
@@ -21,79 +56,108 @@ export default function CarritoPage() {
         phone: "",
         notes: "",
     })
+    const [touched, setTouched] = useState<Touched>({})
+    const [errors, setErrors] = useState<Errors>({})
+
+    const markTouched = (field: Field) =>
+        setTouched((p) => ({ ...p, [field]: true }))
+
+    const showError = (field: Field) => !!touched[field] && !!errors[field]
+
+    const nameRef = useRef<HTMLInputElement | null>(null)
+    const emailRef = useRef<HTMLInputElement | null>(null)
+    const phoneRef = useRef<HTMLInputElement | null>(null)
+
+    useEffect(() => {
+        setErrors(validate(customer))
+    }, [customer])
 
     const canPay = useMemo(() => {
         if (items.length === 0) return false
-        return customer.name.trim() && customer.email.trim() && customer.phone.trim()
-    }, [items.length, customer])
+        return !hasErrors(errors)
+    }, [items.length, errors])
 
-async function handlePay() {
-  if (!canPay) {
-    toast.warning("Completá nombre, email y teléfono para continuar.")
-    return
-  }
+    async function handlePay() {
+        const currentErrors = validate(customer)
 
-  if (!SERVER_URL) {
-    toast.error("Falta configurar NEXT_PUBLIC_SERVER_URL en el .env.local")
-    return
-  }
+        if (hasErrors(currentErrors)) {
+            setErrors(currentErrors)
+            setTouched({ name: true, email: true, phone: true })
 
-  setLoading(true)
+            if (currentErrors.name) nameRef.current?.focus()
+            else if (currentErrors.email) emailRef.current?.focus()
+            else if (currentErrors.phone) phoneRef.current?.focus()
 
-  try {
-    const res = await fetch(`${SERVER_URL}/api/v1/mercadopago/public/create-checkout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        customer,
-        items: items.map((it) => ({
-          id: it.id,
-          title: it.name,
-          quantity: it.quantity,
-          unitPrice: it.price,
-        })),
-      }),
-    })
+            toast.warning("Revisá los datos del formulario.")
+            return
+        }
 
-    // Si el server responde pero con error
-    if (!res.ok) {
-      const text = await res.text().catch(() => "")
-      // Intentamos mostrar algo útil sin reventar
-      const msg = text?.trim()
-        ? text.slice(0, 400) // evita mensajes gigantes
-        : `Error del servidor (HTTP ${res.status})`
+        const normalizedCustomer: CustomerData = {
+            ...customer,
+            name: customer.name.trim(),
+            email: customer.email.trim(),
+            phone: onlyDigits(customer.phone),
+        }
 
-      throw new Error(msg)
+        if (!SERVER_URL) {
+            toast.error("Falta configurar NEXT_PUBLIC_SERVER_URL en el .env.local")
+            return
+        }
+
+        setLoading(true)
+
+        try {
+            const res = await fetch(`${SERVER_URL}/api/v1/mercadopago/public/create-checkout`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    customer: normalizedCustomer,
+                    items: items.map((it) => ({
+                        id: it.id,
+                        title: it.name,
+                        quantity: it.quantity,
+                        unitPrice: it.price,
+                    })),
+                }),
+            })
+
+            // Si el server responde pero con error
+            if (!res.ok) {
+                const text = await res.text().catch(() => "")
+                const msg = text?.trim()
+                    ? text.slice(0, 400)
+                    : `Error del servidor (HTTP ${res.status})`
+
+                throw new Error(msg)
+            }
+
+            // Respuesta OK
+            const data = (await res.json().catch(() => null)) as { initPoint?: string } | null
+            if (!data?.initPoint) {
+                throw new Error("El backend no devolvió initPoint")
+            }
+
+            toast.success("Redirigiendo a Mercado Pago…")
+            window.location.href = data.initPoint
+        } catch (e: any) {
+            // Errores típicos: backend apagado, DNS, CORS, etc.
+            const raw = String(e?.message ?? e)
+
+            let friendly = raw
+
+            // Cuando el backend está caído, fetch suele tirar "Failed to fetch"
+            if (/failed to fetch/i.test(raw)) {
+                friendly =
+                    "No se pudo conectar con el servidor. Verificá que el backend esté encendido y que la URL sea correcta."
+            }
+
+            toast.error("No se pudo iniciar el pago", {
+                description: friendly,
+            })
+        } finally {
+            setLoading(false)
+        }
     }
-
-    // Respuesta OK
-    const data = (await res.json().catch(() => null)) as { initPoint?: string } | null
-    if (!data?.initPoint) {
-      throw new Error("El backend no devolvió initPoint")
-    }
-
-    toast.success("Redirigiendo a Mercado Pago…")
-    window.location.href = data.initPoint
-  } catch (e: any) {
-    // Errores típicos: backend apagado, DNS, CORS, etc.
-    const raw = String(e?.message ?? e)
-
-    let friendly = raw
-
-    // Cuando el backend está caído, fetch suele tirar "Failed to fetch"
-    if (/failed to fetch/i.test(raw)) {
-      friendly =
-        "No se pudo conectar con el servidor. Verificá que el backend esté encendido y que la URL sea correcta."
-    }
-
-    toast.error("No se pudo iniciar el pago", {
-      description: friendly,
-    })
-  } finally {
-    setLoading(false)
-  }
-}
-
 
     return (
         <div className="min-h-screen pt-32">
@@ -183,23 +247,55 @@ async function handlePay() {
                                 <CardTitle>Checkout</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
-                                <Input
-                                    placeholder="Nombre y apellido"
-                                    value={customer.name}
-                                    onChange={(e) => setCustomer((p) => ({ ...p, name: e.target.value }))}
-                                />
-                                <Input
-                                    type="email"
-                                    placeholder="Email"
-                                    value={customer.email}
-                                    onChange={(e) => setCustomer((p) => ({ ...p, email: e.target.value }))}
-                                />
-                                <Input
-                                    placeholder="Teléfono (+54)"
-                                    value={customer.phone}
-                                    onChange={(e) => setCustomer((p) => ({ ...p, phone: e.target.value }))}
-                                />
+                                {/* Nombre */}
+                                <div className="space-y-1">
+                                    <Input
+                                        ref={nameRef}
+                                        placeholder="Nombre y apellido"
+                                        value={customer.name}
+                                        onChange={(e) => setCustomer((p) => ({ ...p, name: e.target.value }))}
+                                        onBlur={() => markTouched("name")}
+                                        className={showError("name") ? "border-red-500 focus-visible:ring-red-500" : ""}
+                                    />
+                                    {showError("name") ? (
+                                        <p className="text-xs text-red-500">{errors.name}</p>
+                                    ) : null}
+                                </div>
 
+                                {/* Email */}
+                                <div className="space-y-1">
+                                    <Input
+                                        ref={emailRef}
+                                        type="email"
+                                        placeholder="Email"
+                                        value={customer.email}
+                                        onChange={(e) => setCustomer((p) => ({ ...p, email: e.target.value }))}
+                                        onBlur={() => markTouched("email")}
+                                        className={showError("email") ? "border-red-500 focus-visible:ring-red-500" : ""}
+                                    />
+                                    {showError("email") ? (
+                                        <p className="text-xs text-red-500">{errors.email}</p>
+                                    ) : null}
+                                </div>
+
+                                {/* Teléfono */}
+                                <div className="space-y-1">
+                                    <Input
+                                        ref={phoneRef}
+                                        placeholder="Teléfono (+54)"
+                                        inputMode="numeric"
+                                        value={customer.phone}
+                                        onChange={(e) => {
+                                            const digits = onlyDigits(e.target.value).slice(0, 10)
+                                            setCustomer((p) => ({ ...p, phone: digits }))
+                                        }}
+                                        onBlur={() => markTouched("phone")}
+                                        className={showError("phone") ? "border-red-500 focus-visible:ring-red-500" : ""}
+                                    />
+                                    {showError("phone") ? (
+                                        <p className="text-xs text-red-500">{errors.phone}</p>
+                                    ) : null}
+                                </div>
                                 <div className="pt-3 border-t border-border flex items-center justify-between">
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="font-bold text-primary">${subtotal.toFixed(2)}</span>

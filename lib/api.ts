@@ -10,7 +10,6 @@ function requireServerUrl() {
 
 async function readBodySafe(res: Response) {
   const text = await res.text().catch(() => "")
-  // intentamos JSON, si no, devolvemos texto
   try {
     return { text, json: text ? JSON.parse(text) : null }
   } catch {
@@ -87,20 +86,17 @@ export function searchProducts(term: string): Promise<any[]> {
 }
 
 
-export async function createCheckout(payload: any) {
-  const res = await fetch(`${SERVER_URL}/api/v1/mercadopago/public/create-checkout`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  })
-
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(text || `HTTP ${res.status}`)
-  }
-
-  return res.json() as Promise<{ initPoint: string }>
+export function createCheckout(payload: any): Promise<{ initPoint: string }> {
+  return fetchJson<{ initPoint: string }>(
+    `${SERVER_URL}/api/v1/mercadopago/public/create-checkout`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }
+  )
 }
+
 
 export class ApiError extends Error {
   status?: number
