@@ -6,6 +6,7 @@ import ClientLayout from "./client-layout"
 import { CartProvider } from "@/components/cart/CartProvider"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { Toaster } from "sonner"
 
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Header />
           <main className="">
             {children}
+            <Toaster richColors position="top-right" />
           </main>
           <Footer />
         </CartProvider>

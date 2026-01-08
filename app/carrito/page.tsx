@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Minus, Plus, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
@@ -26,54 +27,73 @@ export default function CarritoPage() {
         return customer.name.trim() && customer.email.trim() && customer.phone.trim()
     }, [items.length, customer])
 
-    async function handlePay() {
-        if (!SERVER_URL) {
-            alert("Falta NEXT_PUBLIC_SERVER_URL en el .env")
-            return
-        }
-        if (!canPay) return
+async function handlePay() {
+  if (!canPay) {
+    toast.warning("Completá nombre, email y teléfono para continuar.")
+    return
+  }
 
-        setLoading(true)
-        try {
-            // Ajustá este endpoint en tu backend Java:
-            // Debe recibir items + customer y devolver { initPoint: string } (o preferenceId + initPoint)
-            const res = await fetch(`${SERVER_URL}/api/v1/mercadopago/public/createCheckout`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    customer,
-                    items: items.map((it) => ({
-                        id: it.id,
-                        title: it.name,
-                        quantity: it.quantity,
-                        unit_price: it.price,
-                    })),
-                    // URLs de retorno (ideal: que tu backend las setee, pero si querés mandarlas):
-                    backUrls: {
-                        success: `${window.location.origin}/checkout/success`,
-                        failure: `${window.location.origin}/checkout/failure`,
-                        pending: `${window.location.origin}/checkout/pending`,
-                    },
-                }),
-            })
+  if (!SERVER_URL) {
+    toast.error("Falta configurar NEXT_PUBLIC_SERVER_URL en el .env.local")
+    return
+  }
 
-            if (!res.ok) {
-                const text = await res.text()
-                throw new Error(text || `HTTP ${res.status}`)
-            }
+  setLoading(true)
 
-            const data = await res.json()
-            if (!data?.initPoint) throw new Error("El backend no devolvió initPoint")
+  try {
+    const res = await fetch(`${SERVER_URL}/api/v1/mercadopago/public/create-checkout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer,
+        items: items.map((it) => ({
+          id: it.id,
+          title: it.name,
+          quantity: it.quantity,
+          unitPrice: it.price,
+        })),
+      }),
+    })
 
-            // Redirige a MP
-            window.location.href = data.initPoint
-        } catch (e: any) {
-            console.error(e)
-            alert(`No se pudo iniciar el pago.\n${String(e?.message ?? e)}`)
-        } finally {
-            setLoading(false)
-        }
+    // Si el server responde pero con error
+    if (!res.ok) {
+      const text = await res.text().catch(() => "")
+      // Intentamos mostrar algo útil sin reventar
+      const msg = text?.trim()
+        ? text.slice(0, 400) // evita mensajes gigantes
+        : `Error del servidor (HTTP ${res.status})`
+
+      throw new Error(msg)
     }
+
+    // Respuesta OK
+    const data = (await res.json().catch(() => null)) as { initPoint?: string } | null
+    if (!data?.initPoint) {
+      throw new Error("El backend no devolvió initPoint")
+    }
+
+    toast.success("Redirigiendo a Mercado Pago…")
+    window.location.href = data.initPoint
+  } catch (e: any) {
+    // Errores típicos: backend apagado, DNS, CORS, etc.
+    const raw = String(e?.message ?? e)
+
+    let friendly = raw
+
+    // Cuando el backend está caído, fetch suele tirar "Failed to fetch"
+    if (/failed to fetch/i.test(raw)) {
+      friendly =
+        "No se pudo conectar con el servidor. Verificá que el backend esté encendido y que la URL sea correcta."
+    }
+
+    toast.error("No se pudo iniciar el pago", {
+      description: friendly,
+    })
+  } finally {
+    setLoading(false)
+  }
+}
+
 
     return (
         <div className="min-h-screen pt-32">
@@ -175,7 +195,7 @@ export default function CarritoPage() {
                                     onChange={(e) => setCustomer((p) => ({ ...p, email: e.target.value }))}
                                 />
                                 <Input
-                                    placeholder="Teléfono"
+                                    placeholder="Teléfono (+54)"
                                     value={customer.phone}
                                     onChange={(e) => setCustomer((p) => ({ ...p, phone: e.target.value }))}
                                 />

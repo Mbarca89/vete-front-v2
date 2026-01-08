@@ -10,13 +10,23 @@ import { X, Search } from "lucide-react"
 import { useCart } from "@/components/cart/CartProvider"
 import { getProducts, getProductsByCategory, searchProducts } from "@/lib/api"
 import type { Categories, ProductDto, ProductsPage } from "@/types/shop"
+import { toast } from "sonner"
+import { ApiError } from "@/lib/api" // si exportaste ApiError desde api.ts
+
 
 type TiendaClientProps = {
     categories: Categories
     initialProducts: ProductsPage
+    initialError?: string | null
 }
 
-export default function TiendaClient({ categories, initialProducts }: TiendaClientProps) {
+export default function TiendaClient({ categories, initialProducts, initialError }: TiendaClientProps) {
+
+    useEffect(() => {
+        if (initialError) {
+            toast.error("No se pudo cargar la tienda", { description: initialError })
+        }
+    }, [initialError])
 
     const [loading, setLoading] = useState(false)
 
@@ -25,6 +35,9 @@ export default function TiendaClient({ categories, initialProducts }: TiendaClie
     // --- estado principal
     const [products, setProducts] = useState<ProductDto[]>(initialProducts?.data ?? [])
     const [totalCount, setTotalCount] = useState<number>(initialProducts?.totalCount ?? 0)
+
+    // --- errores
+    const [error, setError] = useState<string | null>(null)
 
     // --- filtros
     const [category, setCategory] = useState<string | null>(null)
@@ -48,43 +61,75 @@ export default function TiendaClient({ categories, initialProducts }: TiendaClie
 
     // --- carga de productos según filtros
     useEffect(() => {
-        let active = true
+        let cancelled = false
 
         async function load() {
             setLoading(true)
-            // Si hay búsqueda: tu endpoint devuelve array plano (sin paginado).
+            setError(null)
 
             try {
+                // 🔎 Búsqueda (no paginada)
                 if (searchTerm.trim()) {
                     const res = await searchProducts(searchTerm.trim())
-                    setProducts(Array.isArray(res) ? res : [])
-                    setTotalCount(Array.isArray(res) ? res.length : 0)
+
+                    if (cancelled) return
+                    const list = Array.isArray(res) ? res : []
+                    setProducts(list)
+                    setTotalCount(list.length)
                     return
                 }
 
-                // Si hay categoría: devuelve paginado {data,totalCount}
+                // 🏷️ Categoría (paginada)
                 if (category) {
                     const res = await getProductsByCategory({
                         category,
                         page,
                         size: pageSize,
                     })
+
+                    if (cancelled) return
                     setProducts(res?.data ?? [])
                     setTotalCount(res?.totalCount ?? 0)
                     return
                 }
 
-                // Default: listado general paginado
+                // 📦 Default (paginado)
                 const res = await getProducts({ page, size: pageSize })
+
+                if (cancelled) return
                 setProducts(res?.data ?? [])
                 setTotalCount(res?.totalCount ?? 0)
+            } catch (e: any) {
+                if (cancelled) return
+
+                const msg =
+                    e?.name === "ApiError"
+                        ? e.message
+                        : /failed to fetch/i.test(String(e?.message ?? e))
+                            ? "No se pudo conectar con el servidor. Verificá que el backend esté encendido y la URL sea correcta."
+                            : "Ocurrió un error inesperado al cargar los productos."
+
+                setError(msg)
+
+                // Toast (no muy largo)
+                toast.error("No se pudo cargar la tienda", {
+                    description: msg.length > 180 ? msg.slice(0, 180) + "..." : msg,
+                })
+
+                // Fallback: dejar UI en estado “vacío” consistente
+                setProducts([])
+                setTotalCount(0)
             } finally {
-                if (active) setLoading(false)
+                if (!cancelled) setLoading(false)
             }
         }
 
         load()
+        return () => {
+            cancelled = true
+        }
     }, [category, page, searchTerm])
+
 
     // --- handlers
     const applySearch = () => {
