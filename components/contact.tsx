@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, Phone, Mail, Clock } from "lucide-react"
+import { MapPin, Phone, Mail, Clock, Loader2 } from "lucide-react"
 
 const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? ""
 const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? ""
@@ -46,8 +46,8 @@ export function Contact() {
     try {
       requireEmailJsEnv()
       const templateParams = {
-        from_name: formData.name.trim(),
-        from_email: formData.email.trim(),
+        name: formData.name.trim(),
+        email: formData.email.trim(),
         phone: formData.phone.trim(),
         message: formData.message.trim(),
       }
@@ -161,8 +161,19 @@ export function Contact() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground mt-auto">
-                  Enviar Mensaje
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground mt-auto"
+                >
+                  {loading ? (
+                    <span className="inline-flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Enviando...
+                    </span>
+                  ) : (
+                    "Enviar Mensaje"
+                  )}
                 </Button>
               </form>
             </CardContent>
