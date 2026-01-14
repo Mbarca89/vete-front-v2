@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { fetchJson } from "@/lib/api"
 
-const API_INTERNAL = process.env.INTERNAL_ORIGIN ?? "http://127.0.0.1:8080"
+const PUBLIC_ORIGIN = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://veterinariadelparque.com.ar"
 
 interface Pet {
   id: number
@@ -45,6 +45,11 @@ interface PetData {
   pet: Pet
   medicalHistory: MedicalHistory[]
   vaccine: Vaccine[]
+}
+
+function buildPublicDownloadUrl(filePath: string) {
+  // filePath viene tipo "/otp/fileStorage/....pdf"
+  return `${PUBLIC_ORIGIN}/api/v1/public/files/download?path=${encodeURIComponent(filePath)}`
 }
 
 async function getPetData(petId: string): Promise<PetData | null> {
@@ -88,7 +93,6 @@ export default async function PetProfilePage({
   params: { petId: string }
 }) {
   const data = await getPetData(params.petId)
-
   if (!data) {
     notFound()
   }
@@ -184,6 +188,21 @@ export default async function PetProfilePage({
                         </p>
                       )}
                       {record.notes && <p className="text-sm text-muted-foreground">{record.notes}</p>}
+                      {record.file && record.file.trim() !== "" && (
+                        <div className="mt-3">
+                          <a
+                            href={`/api/v1/public/pet/${pet.publicId}/medical-history/${record.id}/file`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Descargar archivo
+                          </a>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Se abrirá/descargará en una pestaña nueva.
+                          </p>
+                        </div>
+                      )
+                      }
                     </div>
                   ))}
                 </div>
