@@ -2,8 +2,9 @@ import { notFound } from "next/navigation"
 import { Calendar, Heart, Pill, PawPrint, Syringe } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { fetchJson } from "@/lib/api"
 
-const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
+const API_INTERNAL = process.env.INTERNAL_ORIGIN ?? "http://127.0.0.1:8080"
 
 interface Pet {
   id: number
@@ -48,15 +49,7 @@ interface PetData {
 
 async function getPetData(petId: string): Promise<PetData | null> {
   try {
-    const response = await fetch(`${SERVER_URL}/api/v1/public/pet?publicId=${petId}`, {
-      cache: "no-store",
-    })
-
-    if (!response.ok) {
-      return null
-    }
-
-    return await response.json()
+    return await fetchJson<PetData>(`/api/v1/public/pet?publicId=${encodeURIComponent(petId)}`, { cache: "no-store" })
   } catch (error) {
     console.error("Error fetching pet data:", error)
     return null

@@ -46,7 +46,7 @@ async function readBodySafe(res: Response) {
 
 type FetchJsonOptions = RequestInit & { withAuth?: boolean }
 
-async function fetchJson<T>(path: string, init: FetchJsonOptions = {}): Promise<T> {
+export async function fetchJson<T>(path: string, init: FetchJsonOptions = {}): Promise<T> {
   const url = buildUrl(path)
   const { withAuth = false, headers, ...rest } = init
 
