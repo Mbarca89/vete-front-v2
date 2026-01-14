@@ -99,11 +99,6 @@ export default function CarritoPage() {
             phone: onlyDigits(customer.phone),
         }
 
-        if (!SERVER_URL) {
-            toast.error("Falta configurar NEXT_PUBLIC_SERVER_URL en el .env.local")
-            return
-        }
-
         setLoading(true)
 
         try {
