@@ -39,7 +39,7 @@ async function readBodySafe(res: Response) {
 }
 
 type FetchJsonOptions = RequestInit & {
-  withAuth?: boolean 
+  withAuth?: boolean
 }
 
 async function fetchJson<T>(path: string, init: FetchJsonOptions = {}): Promise<T> {
@@ -70,11 +70,16 @@ async function fetchJson<T>(path: string, init: FetchJsonOptions = {}): Promise<
 
 
   if (res.status === 403) {
-    if (typeof window !== "undefined") {
+    if (withAuth && typeof window !== "undefined") {
       localStorage.clear()
       window.location.href = "/"
     }
-    throw new ApiError("Forbidden", { status: 403, url })
+    const body = await readBodySafe(res)
+    const msg =
+      (typeof body.json === "object" && body.json && ("message" in body.json || "error" in body.json)
+        ? String((body.json as any).message ?? (body.json as any).error)
+        : body.text) || "Forbidden"
+    throw new ApiError(msg.slice(0, 600), { status: 403, url, body: body.text })
   }
 
   const { text, json } = await readBodySafe(res)
@@ -82,8 +87,8 @@ async function fetchJson<T>(path: string, init: FetchJsonOptions = {}): Promise<
   if (!res.ok) {
     const msg =
       (typeof json === "object" &&
-      json &&
-      ("message" in json || "error" in json)
+        json &&
+        ("message" in json || "error" in json)
         ? String((json as any).message ?? (json as any).error)
         : text) || `HTTP ${res.status}`
 
@@ -103,12 +108,22 @@ async function fetchJson<T>(path: string, init: FetchJsonOptions = {}): Promise<
 }
 
 
-export function getCategories(): Promise<string[]> {
-  return fetchJson<string[]>(
-    "/v1/category/public/getCategoriesNamesForWeb",
-    { cache: "no-store" }
-  )
+// export function getCategories(): Promise<string[]> {
+//   return fetchJson<string[]>(
+//     "/v1/category/public/getCategoriesNamesForWeb",
+//     { cache: "no-store" }
+//   )
+// }
+
+export async function getCategories(): Promise<string[]> {
+  try {
+    return await fetchJson<string[]>("/v1/category/public/getCategoriesNamesForWeb", { cache: "no-store" })
+  } catch (e: any) {
+    console.error("getCategories failed:", e?.message, e?.status, e?.url, e?.body)
+    return []
+  }
 }
+
 
 export function getProducts({ page, size }: { page: number; size: number }): Promise<ProductsPage> {
   return fetchJson<ProductsPage>(
