@@ -48,7 +48,7 @@ interface PetData {
 
 async function getPetData(petId: string): Promise<PetData | null> {
   try {
-    const response = await fetch(`${SERVER_URL}/v1/public/pet?publicId=${petId}`, {
+    const response = await fetch(`${SERVER_URL}/api/v1/public/pet?publicId=${petId}`, {
       cache: "no-store",
     })
 

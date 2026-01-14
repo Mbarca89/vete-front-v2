@@ -107,7 +107,7 @@ export default function CarritoPage() {
         setLoading(true)
 
         try {
-            const res = await fetch(`${SERVER_URL}/v1/mercadopago/public/create-checkout`, {
+            const res = await fetch(`${SERVER_URL}/api/v1/mercadopago/public/create-checkout`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
