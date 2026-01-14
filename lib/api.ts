@@ -131,7 +131,7 @@ export function getCategories(): Promise<string[]> {
 
 export function getProducts({ page, size }: { page: number; size: number }): Promise<ProductsPage> {
   return fetchJson<ProductsPage>(
-    `/api/v1/products/public/getProductsPaginated?page=${page}&size=${size}`,
+    `/v1/products/public/getProductsPaginated?page=${page}&size=${size}`,
     { cache: "no-store" }
   )
 }
@@ -146,21 +146,21 @@ export function getProductsByCategory({
   size: number
 }): Promise<ProductsPage> {
   return fetchJson<ProductsPage>(
-    `/api/v1/products/public/getByCategoryForWeb?categoryName=${encodeURIComponent(category)}&page=${page}&size=${size}`,
+    `/v1/products/public/getByCategoryForWeb?categoryName=${encodeURIComponent(category)}&page=${page}&size=${size}`,
     { cache: "no-store" }
   )
 }
 
 export function searchProducts(term: string): Promise<any[]> {
   return fetchJson<any[]>(
-    `/api/v1/products/public/searchProduct?searchTerm=${encodeURIComponent(term)}`,
+    `/v1/products/public/searchProduct?searchTerm=${encodeURIComponent(term)}`,
     { cache: "no-store" }
   )
 }
 
 export function createCheckout(payload: any): Promise<{ initPoint: string }> {
   return fetchJson<{ initPoint: string }>(
-    "/api/v1/mercadopago/public/create-checkout",
+    "/v1/mercadopago/public/create-checkout",
     {
       method: "POST",
       body: JSON.stringify(payload),
