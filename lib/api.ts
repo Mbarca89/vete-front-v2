@@ -51,14 +51,14 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
 // Categories
 export function getCategories(): Promise<string[]> {
   return fetchJson<string[]>(
-    `${SERVER_URL}/api/v1/category/public/getCategoriesNamesForWeb`,
+    `${SERVER_URL}/v1/category/public/getCategoriesNamesForWeb`,
     { cache: "no-store" }
   )
 }
 
 export function getProducts({ page, size }: { page: number; size: number }): Promise<ProductsPage> {
   return fetchJson<ProductsPage>(
-    `${SERVER_URL}/api/v1/products/public/getProductsPaginated?page=${page}&size=${size}`,
+    `${SERVER_URL}/v1/products/public/getProductsPaginated?page=${page}&size=${size}`,
     { cache: "no-store" }
   )
 }
@@ -73,14 +73,14 @@ export function getProductsByCategory({
   size: number
 }): Promise<ProductsPage> {
   return fetchJson<ProductsPage>(
-    `${SERVER_URL}/api/v1/products/public/getByCategoryForWeb?categoryName=${encodeURIComponent(category)}&page=${page}&size=${size}`,
+    `${SERVER_URL}/v1/products/public/getByCategoryForWeb?categoryName=${encodeURIComponent(category)}&page=${page}&size=${size}`,
     { cache: "no-store" }
   )
 }
 
 export function searchProducts(term: string): Promise<any[]> {
   return fetchJson<any[]>(
-    `${SERVER_URL}/api/v1/products/public/searchProduct?searchTerm=${encodeURIComponent(term)}`,
+    `${SERVER_URL}/v1/products/public/searchProduct?searchTerm=${encodeURIComponent(term)}`,
     { cache: "no-store" }
   )
 }
@@ -88,7 +88,7 @@ export function searchProducts(term: string): Promise<any[]> {
 
 export function createCheckout(payload: any): Promise<{ initPoint: string }> {
   return fetchJson<{ initPoint: string }>(
-    `${SERVER_URL}/api/v1/mercadopago/public/create-checkout`,
+    `${SERVER_URL}/v1/mercadopago/public/create-checkout`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

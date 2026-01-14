@@ -3,6 +3,8 @@ import { Calendar, Heart, Pill, PawPrint, Syringe } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
+
 interface Pet {
   id: number
   publicId: string | null
@@ -46,7 +48,7 @@ interface PetData {
 
 async function getPetData(petId: string): Promise<PetData | null> {
   try {
-    const response = await fetch(`http://localhost:8080/api/v1/public/pet?publicId=${petId}`, {
+    const response = await fetch(`${SERVER_URL}/v1/public/pet?publicId=${petId}`, {
       cache: "no-store",
     })
 
