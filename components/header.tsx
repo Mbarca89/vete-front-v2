@@ -40,7 +40,7 @@ export function Header() {
       router.push(path)
       return
     }
-    console.log(isHome, id)
+
     if (isHome && id) {
       const element = document.getElementById(id)
       element?.scrollIntoView({ behavior: "smooth" })
