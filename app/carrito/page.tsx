@@ -92,11 +92,20 @@ export default function CarritoPage() {
             return
         }
 
+        function normalizeArPhone(phone: string): string {
+            const digits = onlyDigits(phone)
+            if (digits.startsWith("549")) {
+                return digits
+            }
+
+            return `549${digits}`
+        }
+
         const normalizedCustomer: CustomerData = {
             ...customer,
             name: customer.name.trim(),
             email: customer.email.trim(),
-            phone: onlyDigits(customer.phone),
+            phone: normalizeArPhone(customer.phone),
         }
 
         setLoading(true)
