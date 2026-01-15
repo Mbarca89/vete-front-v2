@@ -11,7 +11,12 @@ import { useCart } from "@/components/cart/CartProvider"
 import { getProducts, getProductsByCategory, searchProducts } from "@/lib/api"
 import type { Categories, ProductDto, ProductsPage } from "@/types/shop"
 import { toast } from "sonner"
-import { ApiError } from "@/lib/api" // si exportaste ApiError desde api.ts
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 
 
 type TiendaClientProps = {
@@ -162,9 +167,8 @@ export default function TiendaClient({ categories, initialProducts, initialError
     const canPrev = page > 1
     const canNext = page < totalPages
 
-    const visiblePages = 5
     const pageButtons = useMemo(() => {
-        const visiblePages = 5
+        const visiblePages = 4
         const half = Math.floor(visiblePages / 2)
 
         let start = Math.max(1, page - half)
@@ -183,10 +187,10 @@ export default function TiendaClient({ categories, initialProducts, initialError
     )
 
     return (
-        <section className="py-20 bg-background">
-            <div className="container mx-auto px-4 grid md:grid-cols-4 gap-8">
+        <section className="py-20 bg-background overflow-x-hidden">
+            <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
                 {/* Sidebar */}
-                <aside className="md:col-span-1 space-y-6">
+                <aside className="md:col-span-1 space-y-6 min-w-0">
                     {/* Search */}
                     <div className="space-y-2">
                         <div className="relative">
@@ -228,7 +232,55 @@ export default function TiendaClient({ categories, initialProducts, initialError
                     </div>
 
                     {/* Categories */}
-                    <div className="bg-card border border-border rounded-lg p-4">
+                    {/* Categories - Mobile Accordion */}
+                    <div className="md:hidden">
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="categories" className="border border-border rounded-lg bg-card px-3">
+                                <AccordionTrigger className="text-sm font-bold text-primary">
+                                    Categorías {category ? `• ${category}` : ""}
+                                </AccordionTrigger>
+
+                                <AccordionContent>
+                                    <div className="flex items-center justify-between mb-3">
+                                        <span className="text-xs text-muted-foreground">
+                                            {categoriesList.length ? `${categoriesList.length} categorías` : "Sin categorías"}
+                                        </span>
+                                        {category ? (
+                                            <Button variant="ghost" size="sm" onClick={clearCategory} className="h-7 px-2">
+                                                Limpiar
+                                            </Button>
+                                        ) : null}
+                                    </div>
+
+                                    <div className="max-h-72 overflow-y-auto pr-1 space-y-2">
+                                        {categoriesList.length > 0 ? (
+                                            categoriesList.map((c) => {
+                                                const active = c === category
+                                                return (
+                                                    <button
+                                                        key={c}
+                                                        onClick={() => selectCategory(c)}
+                                                        className={[
+                                                            "w-full text-left px-3 py-2 rounded-md text-sm transition-colors",
+                                                            active
+                                                                ? "bg-primary text-primary-foreground"
+                                                                : "hover:bg-muted text-foreground",
+                                                        ].join(" ")}
+                                                    >
+                                                        {c}
+                                                    </button>
+                                                )
+                                            })
+                                        ) : (
+                                            <p className="text-sm text-muted-foreground">Sin categorías</p>
+                                        )}
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+
+                    <div className="hidden md:block bg-card border border-border rounded-lg p-4">
                         <div className="flex items-center justify-between mb-3">
                             <h3 className="text-sm font-bold text-primary">Categorías</h3>
                             {category ? (
@@ -265,7 +317,7 @@ export default function TiendaClient({ categories, initialProducts, initialError
                 </aside>
 
                 {/* Products */}
-                <div className="md:col-span-3 space-y-6">
+                <div className="md:col-span-3 space-y-6 min-w-0">
                     <div className="flex items-center justify-between">
                         <p className="text-foreground/70">
                             Mostrando{" "}
