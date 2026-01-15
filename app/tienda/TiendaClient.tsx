@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/accordion"
 
 
+
 type TiendaClientProps = {
     categories: Categories
     initialProducts: ProductsPage
