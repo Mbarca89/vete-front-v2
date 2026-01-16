@@ -47,7 +47,7 @@ export function Hero() {
           <div className="relative">
             <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src="/hero.jpeg"
+                src="/hero.webp"
                 alt="Veterinaria con mascotas"
                 className="w-full h-full object-cover"
               />

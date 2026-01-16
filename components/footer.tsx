@@ -40,7 +40,7 @@ export function Footer() {
           <div>
             <h3 className="font-bold mb-4">Visitanos</h3>
             <div className="">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3335.3966766235076!2d-66.31908522355833!3d-33.282283873456656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95d43eb8e2b13c53%3A0x426e683d243e1f65!2sVeterinaria%20del%20Parque!5e0!3m2!1ses-419!2sar!4v1716296334709!5m2!1ses-419!2sar" width="90%" height="90%" style={{ border: "0" }}></iframe>
+              <iframe title="Ubicación" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3335.3966766235076!2d-66.31908522355833!3d-33.282283873456656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95d43eb8e2b13c53%3A0x426e683d243e1f65!2sVeterinaria%20del%20Parque!5e0!3m2!1ses-419!2sar!4v1716296334709!5m2!1ses-419!2sar" width="90%" height="90%" style={{ border: "0" }}></iframe>
             </div>
           </div>
         </div>
