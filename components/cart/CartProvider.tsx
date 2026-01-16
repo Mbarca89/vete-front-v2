@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react"
 import type { CartItem } from "@/types/cart"
+import { toast } from "sonner"
 
 type CartContextValue = {
   items: CartItem[]
@@ -78,6 +79,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (found) {
           return prev.map((p) => (p.id === item.id ? { ...p, quantity: p.quantity + q } : p))
         }
+        toast.success("Producto agregado al carrito")
         return [...prev, { ...item, quantity: q }]
       })
     },
